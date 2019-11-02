@@ -38,6 +38,32 @@ function makeUsersArray() {
   ]
 }
 
+function makeItnerariesArray(users){
+  return [
+    {
+      id: 1,
+      title: 'Test 1',
+      start_date: '2019-06-22T16:28:32.615Z',
+      end_date: '2019-06-30T16:28:32.615Z',
+      user_id: users[0].id
+    },
+    {
+      id: 2,
+      title: 'Test 2',
+      start_date: '2019-07-22T16:28:32.615Z',
+      end_date: '2019-07-30T16:28:32.615Z',
+      user_id: users[0].id
+    },
+    {
+      id: 3,
+      title: 'Test 3',
+      start_date: '2019-08-22T16:28:32.615Z',
+      end_date: '2019-08-30T16:28:32.615Z',
+      user_id: users[1].id
+    }
+  ]
+}
+
 function seedUsers(db, users) {
   const preppedUsers = users.map(user => ({
     ...user,
@@ -61,9 +87,10 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
   return `Bearer ${token}`
 }
 
-function makeThingsFixtures() {
+function makeItinFixtures() {
   const testUsers = makeUsersArray()
-  return { testUsers }
+  const testItineraries = makeItnerariesArray(testUsers)
+  return { testUsers, testItineraries }
 }
 
 function cleanTables(db) {
@@ -81,7 +108,7 @@ module.exports = {
   makeUsersArray,
   makeAuthHeader,
 
-  makeThingsFixtures,
+  makeItinFixtures,
   seedUsers,
   cleanTables
 }

@@ -18,5 +18,6 @@ CREATE TABLE activity_items (
   end_time TIME,
   cost NUMERIC,
   url TEXT,
-  itinerary_id INTEGER REFERENCES itineraries(id) ON DELETE CASCADE NOT NULL
+  itinerary_id INTEGER REFERENCES itineraries(id) ON DELETE CASCADE NOT NULL,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE NOT NULL
 );
