@@ -2,18 +2,18 @@ const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe.only('Comments Endpoints', function() {
+describe.only('Activity Items Endpoints', function() {
   let db
 
   const {
-    testArticles,
+    testItineraries,
     testUsers,
-  } = helpers.makeArticlesFixtures()
+  } = helpers.makeItinFixtures()
 
   before('make knex instance', () => {
     db = knex({
       client: 'pg',
-      connection: process.env.TEST_DB_URL,
+      connection: process.env.TEST_DATABASE_URL,
     })
     app.set('db', db)
   })
@@ -24,41 +24,46 @@ describe.only('Comments Endpoints', function() {
 
   afterEach('cleanup', () => helpers.cleanTables(db))
 
-  describe(`POST /api/comments`, () => {
-    beforeEach('insert articles', () =>
-      helpers.seedArticlesTables(
+  describe(`POST /api/activity_items`, () => {
+    beforeEach('insert itineraries', () =>
+      helpers.seedItinTables(
         db,
         testUsers,
-        testArticles,
+        testItineraries,
       )
     )
 
-    it(`creates an comment, responding with 201 and the new comment`, function() {
+    it(`creates an activity_items, responding with 201 and the new activity_items`, function() {
       this.retries(3)
-      const testArticle = testArticles[0]
+      const testItinerary = testItineraries[0]
       const testUser = testUsers[0]
-      const newComment = {
-        text: 'Test new comment',
-        article_id: testArticle.id,
+      const newActivityItem = {
+        travel_type: 'Activity',
+        title: 'Test new Activity',
+        description: 'Test description',
+        cost: 1234, 
+        url: 'test.com',
+        itinerary_id: testItinerary.id,
       }
       return supertest(app)
-        .post('/api/comments')
+        .post(`/api/${testItinerary.id}/activity_items`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-        .send(newComment)
+        .send(newActivityItem)
         .expect(201)
         .expect(res => {
           expect(res.body).to.have.property('id')
-          expect(res.body.text).to.eql(newComment.text)
-          expect(res.body.article_id).to.eql(newComment.article_id)
+          expect(res.body.title).to.eql(newActivityItem.title)
+          expect(res.body.travel_type).to.eql(newActivityItem.travel_type)
+          expect(res.body.description).to.eql(newActivityItem.description)
+          expect(res.body.cost).to.eql(newActivityItem.cost)
+          expect(res.body.url).to.eql(newActivityItem.url)
+          expect(res.body.itinerary_id).to.eql(testItinerary.id)
           expect(res.body.user.id).to.eql(testUser.id)
-          expect(res.headers.location).to.eql(`/api/comments/${res.body.id}`)
-          const expectedDate = new Date().toLocaleString('en', { timeZone: 'UTC' })
-          const actualDate = new Date(res.body.date_created).toLocaleString()
-          expect(actualDate).to.eql(expectedDate)
+          expect(res.headers.location).to.eql(`/api/activity_items/${res.body.id}`)
         })
         .expect(res =>
           db
-            .from('blogful_comments')
+            .from('activity_items')
             .select('*')
             .where({ id: res.body.id })
             .first()
@@ -66,6 +71,13 @@ describe.only('Comments Endpoints', function() {
               expect(row.text).to.eql(newComment.text)
               expect(row.article_id).to.eql(newComment.article_id)
               expect(row.user_id).to.eql(testUser.id)
+
+              expect(row.title).to.eql(newActivityItem.title)
+              expect(row.travel_type).to.eql(newActivityItem.travel_type)
+              expect(row.description).to.eql(newActivityItem.description)
+              expect(row.cost).to.eql(newActivityItem.cost)
+              expect(row.url).to.eql(newActivityItem.url)
+              expect(row.itinerary_id).to.eql(testItinerary.id)
               const expectedDate = new Date().toLocaleString('en', { timeZone: 'UTC' })
               const actualDate = new Date(row.date_created).toLocaleString()
               expect(actualDate).to.eql(expectedDate)
@@ -73,23 +85,27 @@ describe.only('Comments Endpoints', function() {
         )
     })
 
-    const requiredFields = ['text', 'article_id']
+    const requiredFields = ['title']
 
     requiredFields.forEach(field => {
-      const testArticle = testArticles[0]
+      const testItinerary = testItineraries[0]
       const testUser = testUsers[0]
-      const newComment = {
-        text: 'Test new comment',
-        article_id: testArticle.id,
+      const newActivityItem = {
+        travel_type: 'Activity',
+        title: 'Test new Activity',
+        description: 'Test description',
+        cost: 1234, 
+        url: 'test.com',
+        itinerary_id: testItinerary.id,
       }
 
       it(`responds with 400 and an error message when the '${field}' is missing`, () => {
-        delete newComment[field]
+        delete newActivityItem[field]
 
         return supertest(app)
           .post('/api/comments')
           .set('Authorization', helpers.makeAuthHeader(testUser))
-          .send(newComment)
+          .send(newActivityItem)
           .expect(400, {
             error: `Missing '${field}' in request body`,
           })

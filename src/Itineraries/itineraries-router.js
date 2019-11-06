@@ -27,7 +27,7 @@ itinerariesRouter
           error: `Missing '${key}' in request body`
         })
 
-    newItinerary.user_id = req.user.id
+    // newItinerary.user_id = req.user.id
 
     ItinerariesService.insertItinerary(
       req.app.get('db'),
@@ -50,7 +50,7 @@ itinerariesRouter
     res.json(ItinerariesService.serializeItinerary(res.itinerary))
   })
 
-itinerariesRouter.route('/:itinerary_id/activity_items/')
+itinerariesRouter.route('/:itinerary_id/activity_items')
   // .all(requireAuth)
   .all(checkItineraryExists)
   .get((req, res, next) => {

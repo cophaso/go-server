@@ -79,6 +79,27 @@ function seedUsers(db, users) {
     )
 }
 
+function seedItinTables(db, users, itineraries, activity_items=[]) {
+  // use a transaction to group the queries and auto rollback on any failure
+  return db.transaction(async trx => {
+    await seedUsers(trx, users)
+    await trx.into('itineraries').insert(itineraries)
+    // update the auto sequence to match the forced id values
+    await trx.raw(
+      `SELECT setval('itineraries_id_seq', ?)`,
+      [itineraries[itineraries.length - 1].id],
+    )
+    // only insert activity_items if there are some, also update the sequence counter
+    if (activity_items.length) {
+      await trx.into('activity_items').insert(activity_items)
+      await trx.raw(
+        `SELECT setval('activity_items_id_seq', ?)`,
+        [activity_items[activity_items.length - 1].id],
+      )
+    }
+  })
+}
+
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
   const token = jwt.sign({ user_id: user.id }, secret, {
     subject: user.user_name,
@@ -110,5 +131,6 @@ module.exports = {
 
   makeItinFixtures,
   seedUsers,
+  seedItinTables,
   cleanTables
 }

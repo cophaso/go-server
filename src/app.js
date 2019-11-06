@@ -21,7 +21,7 @@ app.use(cors())
 app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/itineraries', itinerariesRouter)
-app.use('/api/activity_items', activityItemsRouter)
+app.use('/api/itineraries/:itinerary_id/activity_items', activityItemsRouter)
 
 app.get('/', (req,res) => {
   res.send('Hello, world!')
