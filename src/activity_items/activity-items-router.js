@@ -9,8 +9,8 @@ const jsonBodyParser = express.json()
 
 activityItemsRouter
   .route('/')
-    // .post(requireAuth, jsonBodyParser, (req, res, next) => {
-  .post(jsonBodyParser, (req, res, next) => {
+  .post(requireAuth, jsonBodyParser, (req, res, next) => {
+  // .post(jsonBodyParser, (req, res, next) => {
     const { user_id, title, itinerary_id } = req.body
     const newActivityItem = { user_id, title, itinerary_id }
 
@@ -20,7 +20,7 @@ activityItemsRouter
           error: `Missing '${key}' in request body`
         })
 
-    // newActivityItem.user_id = req.user.id
+    newActivityItem.user_id = req.user.id
 
     ActivityItemsService.insertActivityItem(
       req.app.get('db'),
@@ -37,14 +37,14 @@ activityItemsRouter
 
 activityItemsRouter
   .route('/activity_items/:activity_items')
-  // .all(requireAuth)
+  .all(requireAuth)
   .all(checkActivityItemsExists)
   .get((req, res) => {
     res.json(ActivityItemsService.serializeActivityItem(res.activity_item))
   })
 
 activityItemsRouter.route('/:activity_items/comments')
-    // .all(requireAuth)
+    .all(requireAuth)
     .all(checkActivityItemsExists)
     .get((req, res, next) => {
       ActivityItemsService.getCommentsForActivityItems(

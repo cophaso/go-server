@@ -31,12 +31,15 @@ authRouter
                   return res.status(400).json({
                       error: `Incorrect user_name or password`
                   })
-              const sub = dbUser.user_name
-              const payload = {user_id: dbUser.id}
+                  const sub = dbUser.user_name
+                  const payload = {user_id: dbUser.id}
 
-              res.send({
-                  authToken: AuthService.createJwt(sub, payload),
-              })
+                  console.log(payload)
+               
+                  return res.send({
+                      authToken: AuthService.createJwt(sub, payload),
+                      id: dbUser.id
+                  })
               })
       })
       .catch(next)

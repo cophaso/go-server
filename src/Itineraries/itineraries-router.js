@@ -16,8 +16,7 @@ itinerariesRouter
       })
       .catch(next)
   })
-  // .post(requireAuth, jsonBodyParser, (req, res, next) => {
-    .post(jsonBodyParser, (req, res, next) => {
+  .post(requireAuth, jsonBodyParser, (req, res, next) => {
     const { title, start_date, end_date, user_id } = req.body
     const newItinerary = { title, start_date, end_date, user_id }
 
@@ -27,7 +26,7 @@ itinerariesRouter
           error: `Missing '${key}' in request body`
         })
 
-    // newItinerary.user_id = req.user.id
+    newItinerary.user_id = req.user.id
 
     ItinerariesService.insertItinerary(
       req.app.get('db'),
@@ -44,14 +43,14 @@ itinerariesRouter
 
 itinerariesRouter
   .route('/:itinerary_id')
-  // .all(requireAuth)
+  .all(requireAuth)
   .all(checkItineraryExists)
   .get((req, res) => {
     res.json(ItinerariesService.serializeItinerary(res.itinerary))
   })
 
 itinerariesRouter.route('/:itinerary_id/activity_items')
-  // .all(requireAuth)
+  .all(requireAuth)
   .all(checkItineraryExists)
   .get((req, res, next) => {
     ItinerariesService.getActivityItemsForItinerary(
