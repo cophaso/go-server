@@ -60,31 +60,27 @@ itinerariesRouter
     })
     .catch(next)
   })
-  // .post(requireAuth, jsonBodyParser, (req, res, next) => {
-  //   // .post(jsonBodyParser, (req, res, next) => {
-  //     const { user_id, title, itinerary_id } = req.body
-  //     const newActivityItem = { user_id, title, itinerary_id }
-  
-  //     for (const [key, value] of Object.entries(newActivityItem))
-  //       if (value == null)
-  //         return res.status(400).json({
-  //           error: `Missing '${key}' in request body`
-  //         })
-  
-  //     newActivityItem.user_id = req.user.id
-  
-  //     ActivityItemsService.insertActivityItem(
-  //       req.app.get('db'),
-  //       newActivityItem
-  //     )
-  //       .then(activity_item => {
-  //         res
-  //           .status(201)
-  //           .location(path.posix.join(req.originalUrl))
-  //           .json(ActivityItemsService.serializeActivityItem(activity_item))
-  //       })
-  //       .catch(next)
+  // .patch(jsonParser, (req, res, next) => {
+  //   const { title, start_date, end_date, user_id } = req.body
+  //   const itinToUpdate = { title, start_date, end_date }
+  //   const numberOfValues = Object.values(itinToUpdate).filter(Boolean).length
+  //   if (numberOfValues === 0) {
+  //     return res.status(400).json({
+  //       error: {
+  //         message: `Request body must contain title, start_date, and end_date`
+  //       }
   //     })
+  //   }
+  //   ItinerariesService.updateItinerary(
+  //     req.app.get('db'),
+  //     req.params.note_id,
+  //     noteToUpdate
+  //   )
+  //   .then(numRowsAffected => {
+  //     res.status(204).end()
+  //   })
+  //   .catch(next)
+  // })
 
 
 itinerariesRouter.route('/:itinerary_id/activity_items')

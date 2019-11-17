@@ -10,21 +10,18 @@ const jsonBodyParser = express.json()
 activityItemsRouter
   .route('/')
   .post(requireAuth, jsonBodyParser, (req, res, next) => {
-  // .post(jsonBodyParser, (req, res, next) => {
     const { user_id, title, itinerary_id } = req.body
-    const newActivityItem = { user_id, title, itinerary_id }
+    const required = { user_id, title, itinerary_id } 
 
-    for (const [key, value] of Object.entries(newActivityItem))
+    for (const [key, value] of Object.entries(required))
       if (value == null)
         return res.status(400).json({
           error: `Missing '${key}' in request body`
         })
 
-    newActivityItem.user_id = req.user.id
-
     ActivityItemsService.insertActivityItem(
       req.app.get('db'),
-      newActivityItem
+      req.body
     )
       .then(activity_item => {
         res

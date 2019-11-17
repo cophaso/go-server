@@ -32,6 +32,8 @@ const ItinerariesService = {
         'usr.id',
       )
       .groupBy('itin.id', 'usr.id')
+      // .sortby('itin.start_date')
+      .orderBy('itin.start_date', 'asc')
   },
 
   getById(db, id) {
@@ -94,6 +96,7 @@ const ItinerariesService = {
         'usr.id',
       )
       .groupBy('act_item.id', 'usr.id')
+      .orderBy('act_item.start_date', 'asc')
   },
 
   serializeItinerary(itinerary) {
