@@ -51,6 +51,12 @@ const ItinerariesService = {
       )
   },
 
+  deleteItinerary(knex, id){
+    return knex('itineraries')
+      .where({ id })
+      .delete()
+  },
+
   getActivityItemsForItinerary(db, itinerary_id) {
     return db
       .from('activity_items AS act_item')

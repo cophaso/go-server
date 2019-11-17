@@ -1,9 +1,11 @@
 const express = require('express')
 const path = require('path')
 const ItinerariesService = require('./itineraries-service')
+const ActivityItemsService = require('../activity_items/activity-items-service')
 // const { requireAuth } = require('../middleware/basic-auth')
 const { requireAuth } = require('../middleware/jwt-auth')
 
+const activityItemsRouter = express.Router()
 const itinerariesRouter = express.Router()
 const jsonBodyParser = express.json()
 
@@ -43,11 +45,47 @@ itinerariesRouter
 
 itinerariesRouter
   .route('/:itinerary_id')
-  .all(requireAuth)
+  // .all(requireAuth)
   .all(checkItineraryExists)
   .get((req, res) => {
     res.json(ItinerariesService.serializeItinerary(res.itinerary))
   })
+  .delete((req, res, next) => {
+    ItinerariesService.deleteItinerary(
+      req.app.get('db'),
+      req.params.itinerary_id
+    )
+    .then(() => {
+      res.json({});
+    })
+    .catch(next)
+  })
+  // .post(requireAuth, jsonBodyParser, (req, res, next) => {
+  //   // .post(jsonBodyParser, (req, res, next) => {
+  //     const { user_id, title, itinerary_id } = req.body
+  //     const newActivityItem = { user_id, title, itinerary_id }
+  
+  //     for (const [key, value] of Object.entries(newActivityItem))
+  //       if (value == null)
+  //         return res.status(400).json({
+  //           error: `Missing '${key}' in request body`
+  //         })
+  
+  //     newActivityItem.user_id = req.user.id
+  
+  //     ActivityItemsService.insertActivityItem(
+  //       req.app.get('db'),
+  //       newActivityItem
+  //     )
+  //       .then(activity_item => {
+  //         res
+  //           .status(201)
+  //           .location(path.posix.join(req.originalUrl))
+  //           .json(ActivityItemsService.serializeActivityItem(activity_item))
+  //       })
+  //       .catch(next)
+  //     })
+
 
 itinerariesRouter.route('/:itinerary_id/activity_items')
   .all(requireAuth)
