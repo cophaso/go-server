@@ -32,7 +32,6 @@ const ItinerariesService = {
         'usr.id',
       )
       .groupBy('itin.id', 'usr.id')
-      // .sortby('itin.start_date')
       .orderBy('itin.start_date', 'asc')
   },
 
@@ -126,8 +125,8 @@ const ItinerariesService = {
       description: xss(activity_items.description),
       start_date: new Date(activity_items.start_date),
       end_date: new Date(activity_items.end_date),
-      start_time: new Date().getTime(activity_items.start_time),
-      end_time: new Date().getTime(activity_items.end_time),
+      start_time: activity_items.start_time,
+      end_time: activity_items.end_time,
       cost: activity_items.cost,
       url: xss(activity_items.url),
       itinerary_id: activity_items.itinerary_id,
