@@ -1,11 +1,7 @@
 const express = require('express')
 const path = require('path')
 const ItinerariesService = require('./itineraries-service')
-const ActivityItemsService = require('../activity_items/activity-items-service')
-// const { requireAuth } = require('../middleware/basic-auth')
 const { requireAuth } = require('../middleware/jwt-auth')
-
-const activityItemsRouter = express.Router()
 const itinerariesRouter = express.Router()
 const jsonBodyParser = express.json()
 
@@ -45,7 +41,6 @@ itinerariesRouter
 
 itinerariesRouter
   .route('/:itinerary_id')
-  // .all(requireAuth)
   .all(checkItineraryExists)
   .get((req, res) => {
     res.json(ItinerariesService.serializeItinerary(res.itinerary))
