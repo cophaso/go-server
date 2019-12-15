@@ -89,7 +89,7 @@ itinerariesRouter.route('/:itinerary_id/activity_items')
       .then(activity_items => {
         res.json(activity_items.map(ItinerariesService.serializeItineraryActivityItem))
       })
-      .catch(next)
+      // .catch(next)
   })
 
 /* async/await syntax for promises */
