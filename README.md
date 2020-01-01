@@ -1,17 +1,12 @@
-# Express Boilerplate!
+# Go!
 
-This is a boilerplate project used for starting new projects!
+Live App: https://go-app.now.sh/
 
-## Set up
+### Summary
+Go is an itinerary application that allows the requires an account to use. After logging in the user can create an itinerary with a start an end date. In that itinerary a user can create activity items. Activity items are travel plans for the users vacation. 
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
-
-1. Clone this repository to your local machine `git clone git@github.com:cophaso/express-boilerplate.git NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+### Tech Stack 
+Node.js and Express Server 
 
 ## Scripts
 
