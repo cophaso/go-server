@@ -10,7 +10,9 @@ Node.js and Express Server
 
 ## Endpoints
 `auth`: Authenticatin for the App
+
 `/itineraries`: Allows you to create and delete itinerary items
+
 `activity_items`: Allow you to post, these are activities that are associated with the itinerary. 
 
 ## Scripts
