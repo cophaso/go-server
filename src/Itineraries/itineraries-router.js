@@ -1,9 +1,9 @@
-const express = require('express')
-const path = require('path')
-const ItinerariesService = require('./itineraries-service')
-const { requireAuth } = require('../middleware/jwt-auth')
-const itinerariesRouter = express.Router()
-const jsonBodyParser = express.json()
+const express = require('express');
+const path = require('path');
+const ItinerariesService = require('./itineraries-service');
+const { requireAuth } = require('../middleware/jwt-auth');
+const itinerariesRouter = express.Router();
+const jsonBodyParser = express.json();
 
 itinerariesRouter
   .route('/')
@@ -37,7 +37,7 @@ itinerariesRouter
           .json(ItinerariesService.serializeItinerary(itinerary))
       })
       .catch(next)
-    })
+  })
 
 itinerariesRouter
   .route('/:itinerary_id')
@@ -50,32 +50,11 @@ itinerariesRouter
       req.app.get('db'),
       req.params.itinerary_id
     )
-    .then(() => {
-      res.json({});
-    })
-    .catch(next)
+      .then(() => {
+        res.json({});
+      })
+      .catch(next)
   })
-  // .patch(jsonParser, (req, res, next) => {
-  //   const { title, start_date, end_date, user_id } = req.body
-  //   const itinToUpdate = { title, start_date, end_date }
-  //   const numberOfValues = Object.values(itinToUpdate).filter(Boolean).length
-  //   if (numberOfValues === 0) {
-  //     return res.status(400).json({
-  //       error: {
-  //         message: `Request body must contain title, start_date, and end_date`
-  //       }
-  //     })
-  //   }
-  //   ItinerariesService.updateItinerary(
-  //     req.app.get('db'),
-  //     req.params.note_id,
-  //     noteToUpdate
-  //   )
-  //   .then(numRowsAffected => {
-  //     res.status(204).end()
-  //   })
-  //   .catch(next)
-  // })
 
 
 itinerariesRouter.route('/:itinerary_id/activity_items')
@@ -89,7 +68,6 @@ itinerariesRouter.route('/:itinerary_id/activity_items')
       .then(activity_items => {
         res.json(activity_items.map(ItinerariesService.serializeItineraryActivityItem))
       })
-      // .catch(next)
   })
 
 /* async/await syntax for promises */
@@ -112,4 +90,4 @@ async function checkItineraryExists(req, res, next) {
   }
 }
 
-module.exports = itinerariesRouter
+module.exports = itinerariesRouter;

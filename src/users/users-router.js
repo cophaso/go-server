@@ -1,23 +1,23 @@
-const express = require('express')
-const path = require('path')
-const UsersService = require('./users-service')
+const express = require('express');
+const path = require('path');
+const UsersService = require('./users-service');
 
-const usersRouter = express.Router()
-const jsonBodyParser = express.json()
+const usersRouter = express.Router();
+const jsonBodyParser = express.json();
 
 usersRouter
   .post('/', jsonBodyParser, (req, res, next) => {
-    const {first_name, last_name, user_name, password} = req.body
+    const { first_name, last_name, user_name, password } = req.body
 
-    for(const field of ['first_name', 'last_name', 'user_name', 'password'])
-      if(!req.body[field])
+    for (const field of ['first_name', 'last_name', 'user_name', 'password'])
+      if (!req.body[field])
         return res.status(400).json({
           error: `Missing '${field}' in request body`
         })
 
     const badPassword = UsersService.validatePassword(password)
 
-    if(badPassword)
+    if (badPassword)
       return res.status(400).json({
         error: badPassword
       })
@@ -26,8 +26,8 @@ usersRouter
       req.app.get('db'),
       user_name
     )
-      .then(hasUsername =>{
-        if(hasUsername)
+      .then(hasUsername => {
+        if (hasUsername)
           return res.status(400).json({
             error: `Username already taken`
           })
@@ -41,7 +41,7 @@ usersRouter
               password: hashedPassword,
               date_created: 'now()'
             }
-        
+
             return UsersService.insertUser(
               req.app.get('db'),
               newUser
@@ -57,4 +57,4 @@ usersRouter
       .catch(next)
   })
 
-module.exports = usersRouter
+module.exports = usersRouter;

@@ -1,9 +1,9 @@
-const knex = require('knex')
-const app = require('../src/app')
-const helpers = require('./test-helpers')
+const knex = require('knex');
+const app = require('../src/app');
+const helpers = require('./test-helpers');
 
-describe.only('Activity Items Endpoints', function() {
-  let db
+describe('Activity Items Endpoints', function () {
+  let db;
 
   const {
     testItineraries,
@@ -16,13 +16,13 @@ describe.only('Activity Items Endpoints', function() {
       connection: process.env.TEST_DATABASE_URL,
     })
     app.set('db', db)
-  })
+  });
 
-  after('disconnect from db', () => db.destroy())
+  after('disconnect from db', () => db.destroy());
 
-  before('cleanup', () => helpers.cleanTables(db))
+  before('cleanup', () => helpers.cleanTables(db));
 
-  afterEach('cleanup', () => helpers.cleanTables(db))
+  afterEach('cleanup', () => helpers.cleanTables(db));
 
   describe(`POST /api/activity_items`, () => {
     beforeEach('insert itineraries', () =>
@@ -33,20 +33,23 @@ describe.only('Activity Items Endpoints', function() {
       )
     )
 
-    it(`creates an activity_items, responding with 201 and the new activity_items`, function() {
-      this.retries(3)
+    it(`creates an activity_items, responding with 201 and the new activity_items`, function () {
+      // this.retries(3)
       const testItinerary = testItineraries[0]
       const testUser = testUsers[0]
+      const d = new Date();
+      const n = d.getTime();
       const newActivityItem = {
         travel_type: 'Activity',
         title: 'Test new Activity',
         description: 'Test description',
-        cost: 1234, 
+        cost: "1234",
         url: 'test.com',
         itinerary_id: testItinerary.id,
+        user_id: testUser.id
       }
       return supertest(app)
-        .post(`/api/${testItinerary.id}/activity_items`)
+        .post(`/api/itineraries/${testItinerary.id}/activity_items`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .send(newActivityItem)
         .expect(201)
@@ -59,7 +62,7 @@ describe.only('Activity Items Endpoints', function() {
           expect(res.body.url).to.eql(newActivityItem.url)
           expect(res.body.itinerary_id).to.eql(testItinerary.id)
           expect(res.body.user.id).to.eql(testUser.id)
-          expect(res.headers.location).to.eql(`/api/activity_items/${res.body.id}`)
+          expect(res.headers.location).to.eql(`/api/itineraries/${res.body.itinerary_id}/activity_items/${res.body.id}`)
         })
         .expect(res =>
           db
@@ -68,10 +71,6 @@ describe.only('Activity Items Endpoints', function() {
             .where({ id: res.body.id })
             .first()
             .then(row => {
-              expect(row.text).to.eql(newComment.text)
-              expect(row.article_id).to.eql(newComment.article_id)
-              expect(row.user_id).to.eql(testUser.id)
-
               expect(row.title).to.eql(newActivityItem.title)
               expect(row.travel_type).to.eql(newActivityItem.travel_type)
               expect(row.description).to.eql(newActivityItem.description)
@@ -94,16 +93,17 @@ describe.only('Activity Items Endpoints', function() {
         travel_type: 'Activity',
         title: 'Test new Activity',
         description: 'Test description',
-        cost: 1234, 
+        cost: 1234,
         url: 'test.com',
         itinerary_id: testItinerary.id,
+        user_id: testUser.id
       }
 
       it(`responds with 400 and an error message when the '${field}' is missing`, () => {
         delete newActivityItem[field]
 
         return supertest(app)
-          .post('/api/comments')
+          .post(`/api/itineraries/${testItinerary.id}/activity_items`)
           .set('Authorization', helpers.makeAuthHeader(testUser))
           .send(newActivityItem)
           .expect(400, {

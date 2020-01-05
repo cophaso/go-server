@@ -1,4 +1,4 @@
-const xss = require('xss')
+const xss = require('xss');
 
 const ItinerariesService = {
   getAllItineraries(db) {
@@ -52,7 +52,7 @@ const ItinerariesService = {
       )
   },
 
-  deleteItinerary(knex, id){
+  deleteItinerary(knex, id) {
     return knex('itineraries')
       .where({ id })
       .delete()
@@ -141,4 +141,4 @@ const ItinerariesService = {
   },
 }
 
-module.exports = ItinerariesService
+module.exports = ItinerariesService;

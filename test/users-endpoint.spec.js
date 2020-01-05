@@ -1,9 +1,9 @@
-const knex = require('knex')
-const bcrypt = require('bcryptjs')
-const app = require('../src/app')
-const helpers = require('./test-helpers')
+const knex = require('knex');
+const bcrypt = require('bcryptjs');
+const app = require('../src/app');
+const helpers = require('./test-helpers');
 
-describe('Users Endpoints', function() {
+describe('Users Endpoints', function () {
   let db
 
   const { testUsers } = helpers.makeItinFixtures()
@@ -54,7 +54,7 @@ describe('Users Endpoints', function() {
         })
       })
 
-      it(`Responds 400 password must be longer than 8 characters when empty password`, () =>{
+      it(`Responds 400 password must be longer than 8 characters when empty password`, () => {
         const userShortPassword = {
           user_name: 'test user_name',
           password: '1234567',
@@ -70,7 +70,7 @@ describe('Users Endpoints', function() {
           })
       })
 
-      it(`Responds 400 password must be shorter than 72 characters when empty password`, () =>{
+      it(`Responds 400 password must be shorter than 72 characters when empty password`, () => {
         const userLongPassword = {
           user_name: 'test user_name',
           password: '*'.repeat(73),
@@ -86,7 +86,7 @@ describe('Users Endpoints', function() {
           })
       })
 
-      it(`Responds 400 when password starts with spaces`, () =>{
+      it(`Responds 400 when password starts with spaces`, () => {
         const userStartsWithSpacesPassword = {
           user_name: 'test user_name',
           password: ' 1Aa!2Bb@',
@@ -102,7 +102,7 @@ describe('Users Endpoints', function() {
           })
       })
 
-      it(`Responds 400 when password ends with spaces`, () =>{
+      it(`Responds 400 when password ends with spaces`, () => {
         const userEndsWithSpacesPassword = {
           user_name: 'test user_name',
           password: '1Aa!2Bb@ ',
@@ -118,7 +118,7 @@ describe('Users Endpoints', function() {
           })
       })
 
-      it(`Responds 400 when password isn't complex enough`, () =>{
+      it(`Responds 400 when password isn't complex enough`, () => {
         const userNotComplexPassword = {
           user_name: 'test user_name',
           password: '12345678',
@@ -134,7 +134,7 @@ describe('Users Endpoints', function() {
           })
       })
 
-      it(`Responds 400 when user already exists`, () =>{
+      it(`Responds 400 when user already exists`, () => {
         const alreadyUser = {
           user_name: testUser.user_name,
           password: '1Aa!2Bb@',
@@ -164,7 +164,7 @@ describe('Users Endpoints', function() {
           .post('/api/users')
           .send(newUser)
           .expect(201)
-          .expect(res =>{
+          .expect(res => {
             expect(res.body).to.have.property('id')
             expect(res.body.user_name).to.eql(newUser.user_name)
             expect(res.body.first_name).to.eql(newUser.first_name)
@@ -185,7 +185,7 @@ describe('Users Endpoints', function() {
 
                 return bcrypt.compare(newUser.password, row.password)
               })
-              .then(compareMatch =>{
+              .then(compareMatch => {
                 expect(compareMatch).to.be.true
               })
           )

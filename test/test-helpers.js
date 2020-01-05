@@ -1,5 +1,5 @@
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 function makeUsersArray() {
   return [
@@ -38,7 +38,7 @@ function makeUsersArray() {
   ]
 }
 
-function makeItnerariesArray(users){
+function makeItnerariesArray(users) {
   return [
     {
       id: 1,
@@ -79,7 +79,7 @@ function seedUsers(db, users) {
     )
 }
 
-function seedItinTables(db, users, itineraries, activity_items=[]) {
+function seedItinTables(db, users, itineraries, activity_items = []) {
   // use a transaction to group the queries and auto rollback on any failure
   return db.transaction(async trx => {
     await seedUsers(trx, users)
@@ -133,4 +133,4 @@ module.exports = {
   seedUsers,
   seedItinTables,
   cleanTables
-}
+};

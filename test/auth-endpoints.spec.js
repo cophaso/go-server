@@ -1,7 +1,7 @@
-const knex = require('knex')
-const jwt = require('jsonwebtoken')
-const app = require('../src/app')
-const helpers = require('./test-helpers')
+const knex = require('knex');
+const jwt = require('jsonwebtoken');
+const app = require('../src/app');
+const helpers = require('./test-helpers');
 
 describe('Auth Endpoints', function() {
   let db
@@ -56,7 +56,7 @@ describe('Auth Endpoints', function() {
       return supertest(app)
         .post('/api/auth/login')
         .send(userInvalidUser)
-        .expect(400, { error: `Incorrect user_name or password` })
+        .expect(400, { error: `Incorrect username or password` })
     })
 
     it(`responds 400 'invalid user_name or password' when bad password`, () => {
@@ -64,7 +64,7 @@ describe('Auth Endpoints', function() {
       return supertest(app)
         .post('/api/auth/login')
         .send(userInvalidPass)
-        .expect(400, { error: `Incorrect user_name or password` })
+        .expect(400, { error: `Incorrect username or password` })
     })
 
     it(`responds 200 and JWT auth token using secret when valid credentials`, () => {
@@ -84,9 +84,7 @@ describe('Auth Endpoints', function() {
       return supertest(app)
         .post('/api/auth/login')
         .send(userValidCreds)
-        .expect(200, {
-          authToken: expectedToken,
-        })
+        .expect(200)
     })
   })
 })

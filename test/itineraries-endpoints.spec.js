@@ -1,8 +1,8 @@
-const knex = require('knex')
-const app = require('../src/app')
-const helpers = require('./test-helpers')
+const knex = require('knex');
+const app = require('../src/app');
+const helpers = require('./test-helpers');
 
-describe('Itineraries Endpoints', function() {
+describe('Itineraries Endpoints', function () {
   let db
 
   const {
@@ -31,15 +31,15 @@ describe('Itineraries Endpoints', function() {
       )
     )
 
-    it(`creates an itinerary, responding with 201 and the new itinerary`, function() {
+    it(`creates an itinerary, responding with 201 and the new itinerary`, function () {
       this.retries(3)
       const testUser = testUsers[0]
       const newItinerary = {
-              title: 'Spec Test',
-              start_date: '2019-06-22T00:00:00.000Z',
-              end_date: '2019-06-30T00:00:00.000Z',
-              user_id: testUser.id
-            }
+        title: 'Spec Test',
+        start_date: '2019-06-22T00:00:00.000Z',
+        end_date: '2019-06-30T00:00:00.000Z',
+        user_id: testUser.id
+      }
       return supertest(app)
         .post('/api/itineraries')
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -61,8 +61,6 @@ describe('Itineraries Endpoints', function() {
             .first()
             .then(row => {
               expect(row.title).to.eql(newItinerary.title)
-              // expect(row.start_date).to.eql('Sat, 22 Jun 2019 00:00:00 GMT')
-              // expect(row.end_date).to.eql(newItinerary.end_date)
               expect(row.user_id).to.eql(testUser.id)
             })
         )

@@ -1,4 +1,4 @@
-const xss = require('xss')
+const xss = require('xss');
 
 const ActivityItemsService = {
   getById(db, id) {
@@ -52,7 +52,7 @@ const ActivityItemsService = {
 
   getCommentsForActivityItem(db, activity_item_id) {
     return db
-    .from('comments AS comm')
+      .from('comments AS comm')
       .select(
         'comm.id',
         'comm.description',
@@ -104,7 +104,7 @@ const ActivityItemsService = {
     }
   },
 
-  serializeActivityItemComment(comment){
+  serializeActivityItemComment(comment) {
     const { user } = comment
     return {
       id: comment.id,
@@ -121,4 +121,4 @@ const ActivityItemsService = {
   }
 }
 
-module.exports = ActivityItemsService
+module.exports = ActivityItemsService;
