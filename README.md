@@ -8,6 +8,13 @@ Go is an itinerary application that allows the requires an account to use. After
 ### Tech Stack 
 Node.js and Express Server 
 
+## Endpoints
+`auth`: Authenticatin for the App
+
+`/itineraries`: Allows you to create and delete itinerary items
+
+`activity_items`: Allow you to post, these are activities that are associated with the itinerary. 
+
 ## Scripts
 
 Start the application `npm start`
@@ -15,7 +22,3 @@ Start the application `npm start`
 Start nodemon for the application `npm run dev`
 
 Run the tests `npm test`
-
-## Deploying
-
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
